@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@import "@heroui/styles"; 
+
+@import "tailwindcss";
+@import "@heroui/styles";
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light mode */
+:root {
+  --color-primary: #C96B4B;      /* Terracotta */
+  --color-secondary: #3B2F2F;    /* Espresso */
+  --color-accent: #6B8F71;       /* Sage */
+
+  --color-bg-light: #FAF7F2;     /* Warm Ivory */
+  --color-text-dark: #1F2937;    /* Charcoal */
+  --color-bg-card: #ffffff;
+  --color-border: #E5E7EB;
+  --color-text-muted: #6b7280;
+}
+
+/* Dark mode */
+.dark {
+  --color-primary: #D9805F;      /* lifted Terracotta for contrast */
+  --color-secondary: #C96B4B;
+  --color-accent: #85AB8B;       /* lifted Sage */
+
+  --color-bg-light: #1F2937;     /* Charcoal as base */
+  --color-text-dark: #FAF7F2;    /* Warm Ivory as text */
+  --color-bg-card: #2B3543;
+  --color-border: #3D4A5C;
+  --color-text-muted: #9CA6B4;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+
+  --color-bg-light: var(--color-bg-light);
+  --color-text-dark: var(--color-text-dark);
+  --color-bg-card: var(--color-bg-card);
+  --color-border: var(--color-border);
+  --color-text-muted: var(--color-text-muted);
+}
