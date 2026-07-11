@@ -1,15 +1,15 @@
 
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
-import Home from './pages/home'
+import Home from './pages/Home'
 
-import Login from './pages/login'
-import Signup from './pages/signup'
-import About from './pages/about'
-import AuthLayout from './layouts/authLayout'
-import Explore from './pages/explore'
-import Profile from './pages/profile'
-import MainLayout from './layouts/mainLayout'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import About from './pages/About'
+import AuthLayout from './layouts/AuthLayout'
+import Explore from './pages/Explore'
+import Profile from './pages/Profile'
+import MainLayout from './layouts/MainLayout'
 
 
 function App() {

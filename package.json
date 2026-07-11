@@ -10,9 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@better-auth/mongo-adapter": "^1.6.23",
+    "@gravity-ui/icons": "^2.20.0",
     "@heroui/react": "^3.2.2",
+    "@iconify/react": "^6.0.2",
     "@tailwindcss/vite": "^4.3.2",
+    "better-auth": "^1.6.23",
     "lucide-react": "^1.24.0",
+    "mongodb": "^7.5.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router": "^8.2.0",
