@@ -12,19 +12,25 @@ import Profile from './pages/Profile'
 import MainLayout from './layouts/MainLayout'
 import { useCurrentSession } from '../lib/action/useCurrentSession'
 import Cart from './pages/Cart'
+import NotFound from './pages/NotFound'
+import ErrorBoundary from './pages/ErrorBoundary'
 
 
 function App() {
-      const { user, isPending } = useCurrentSession();
+      const { user } = useCurrentSession();
 
   return (
+    <ErrorBoundary>
+      
+  
     <Routes >
       <Route element={<MainLayout />}>
       <Route index element={<Home />} />
       <Route path="about" element={<About />} />
       <Route path="explore" element={<Explore />} />
-      <Route path="profile" element={<Profile />} />
+      {user ? <Route path="profile" element={<Profile />} />:""}
       {user ? <Route path="cart" element={<Cart />} />:""}
+       <Route path="*" element={<NotFound />} />
       </Route>
      
 
@@ -33,6 +39,8 @@ function App() {
         <Route path="signup" element={<Signup />} />
       </Route>
     </Routes>
+
+      </ErrorBoundary>
   )
 }
 

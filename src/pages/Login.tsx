@@ -1,5 +1,5 @@
 import {Check} from "@gravity-ui/icons";
-import {Button, Description, FieldError, Form, Input, Label, Link, TextField, toast} from "@heroui/react";
+import {Button, Description, FieldError, Form, Input, Label, Link, Spinner, TextField, toast} from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
@@ -33,7 +33,7 @@ export default function Login() {
             onRequest: () => {
               setLoading(true);
             },
-            onSuccess: (ctx) => {
+            onSuccess: () => {
       setLoading(false);
       toast.success("Login successfully!");
       
@@ -137,7 +137,7 @@ export default function Login() {
           className="flex-1 bg-primary text-bg-light hover:bg-secondary"
         >
           <Check />
-          Login
+        {loading ? <Spinner /> : 'Login'}
         </Button>
         <Button
           type="reset"

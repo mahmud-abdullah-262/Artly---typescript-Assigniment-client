@@ -1,5 +1,5 @@
 import {Check} from "@gravity-ui/icons";
-import {Button, Description, FieldError, Form, Input, Label, Link, TextField, toast} from "@heroui/react";
+import {Button, Description, FieldError, Form, Input, Label, Link, Spinner, TextField, toast} from "@heroui/react";
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 import {Icon} from "@iconify/react";
@@ -23,7 +23,7 @@ export default  function Signup() {
 
     console.log("Form submitted with:", formInfo);
 
-    const { data, error } = await authClient.signUp.email(
+    const { error } = await authClient.signUp.email(
       {
         email: formInfo.email,
         password: formInfo.password,
@@ -163,7 +163,7 @@ export default  function Signup() {
           className="flex-1 bg-primary text-bg-light hover:bg-secondary"
         >
           <Check />
-          Sign up
+        {loading ? <Spinner /> : 'Sign up'}
         </Button>
         <Button
           type="reset"

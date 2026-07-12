@@ -20,7 +20,7 @@ const navLinks: NavLinkItem[] = [
 export default function AppNavbar() {
   const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-   const { user, isPending } = useCurrentSession();
+   const { user } = useCurrentSession();
 
 const finalNavLinks = user
   ? [...navLinks, { label: 'Cart', path: '/cart' }]
@@ -44,7 +44,7 @@ const finalNavLinks = user
             A
           </span>
           <span className="font-serif text-xl font-semibold text-text-dark">
-            Artly
+            Artla
           </span>
         </NavLink>
 
@@ -208,8 +208,8 @@ const finalNavLinks = user
 <>
  <li>
             <Link
-              as={NavLink}
-              to="/login"
+              
+              href="/login"
               className="text-[15px] font-medium text-text-dark no-underline"
               onClick={() => setIsMenuOpen(false)}
             >
