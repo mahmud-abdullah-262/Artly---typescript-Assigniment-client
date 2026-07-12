@@ -10,10 +10,12 @@ import AuthLayout from './layouts/AuthLayout'
 import Explore from './pages/Explore'
 import Profile from './pages/Profile'
 import MainLayout from './layouts/MainLayout'
+import { useCurrentSession } from '../lib/action/useCurrentSession'
+import Cart from './pages/Cart'
 
 
 function App() {
-
+      const { user, isPending } = useCurrentSession();
 
   return (
     <Routes >
@@ -22,6 +24,7 @@ function App() {
       <Route path="about" element={<About />} />
       <Route path="explore" element={<Explore />} />
       <Route path="profile" element={<Profile />} />
+      {user ? <Route path="cart" element={<Cart />} />:""}
       </Route>
      
 

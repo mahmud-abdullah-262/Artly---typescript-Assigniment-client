@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Link, Button } from "@heroui/react";
-import { NavLink } from "react-router-dom";
+import { Link, Button, toast } from "@heroui/react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Search, ShoppingCart, Menu, X } from "lucide-react";
+import { useCurrentSession } from "../../lib/action/useCurrentSession";
+import { authClient } from "../../lib/auth-client";
 
 interface NavLinkItem {
   label: string;
@@ -12,11 +14,20 @@ const navLinks: NavLinkItem[] = [
   { label: "Home", path: "/" },
   { label: "Explore", path: "/explore" },
   { label: "About", path: "/about" },
+ 
 ];
 
 export default function AppNavbar() {
+  const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+   const { user, isPending } = useCurrentSession();
 
+const finalNavLinks = user
+  ? [...navLinks, { label: 'Cart', path: '/cart' }]
+  : navLinks;
+
+
+   
  const navLinkClass = ({ isActive }: { isActive: boolean }): string =>
   `text-[15px] font-medium transition-colors ${
     isActive 
@@ -28,7 +39,7 @@ export default function AppNavbar() {
     <nav className="sticky top-0 z-40 w-full border-b border-border bg-bg-light">
       <header className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <NavLink to="/home" className="flex items-center gap-2">
+        <NavLink to="/" className="flex items-center gap-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-md bg-text-dark text-bg-light font-bold text-lg font-serif">
             A
           </span>
@@ -39,7 +50,7 @@ export default function AppNavbar() {
 
         {/* Desktop links */}
         <ul className="hidden sm:flex items-center gap-8">
-          {navLinks.map((link) => (
+          {finalNavLinks.map((link) => (
             <li key={link.path}>
               <NavLink to={link.path} className={navLinkClass}>
                 {link.label}
@@ -66,7 +77,41 @@ export default function AppNavbar() {
               <ShoppingCart size={20} />
             </button>
           </li>
+          {/*  */}
+
+        {user ? 
+        <>
+       <li>
+  <Button
+  variant="ghost"
+    onClick={async () => {
+      await authClient.signOut();
+      toast.success('user successfully logged out')
+      navigate('/login')
+    }}
+  
+    className="text-[15px] font-medium text-text-dark hover:text-primary hover:no-underline hover:bg-bg-light"
+  >
+    Signout
+  </Button>
+</li>
           <li>
+            <Link
+            className={'no-underline '}
+            href="/profile">
+             <Button
+              className="bg-text-dark text-bg-light font-medium px-5 rounded-sm no-underline"
+            >
+              Profile
+            </Button>
+            </Link>
+           
+          </li>
+        </>
+        :
+        
+        <>
+        <li>
             <Link
           
               href="/login"
@@ -87,6 +132,10 @@ export default function AppNavbar() {
             </Link>
            
           </li>
+        </>
+        }
+          
+          {/*  */}
         </ul>
 
         {/* Mobile menu toggle */}
@@ -102,7 +151,7 @@ export default function AppNavbar() {
       {/* Mobile menu */}
       {isMenuOpen && (
         <ul className="sm:hidden flex flex-col gap-4 border-t border-border bg-bg-light px-6 py-5">
-          {navLinks.map((link) => (
+          {finalNavLinks.map((link) => (
             <li key={link.path}>
               <NavLink
                 to={link.path}
@@ -122,8 +171,42 @@ export default function AppNavbar() {
               <ShoppingCart size={20} />
             </button>
           </li>
+{user ? 
+<>
+<li>
+  <Button
+  variant="ghost"
+    onClick={async () => {
+      await authClient.signOut();
+      setIsMenuOpen(false)
+      navigate('/login')
+      toast.success('user successfully logged out!')
+    }}
+    className="bg-bg-light text-[15px] font-medium text-text-dark hover:text-primary hover:no-underline"
+  >
+    Signout
+  </Button>
+</li>
 
           <li>
+            <Link
+            className={'w-full no-underline'}
+            href="/profile"
+            >
+            <Button
+      
+              className="bg-text-dark text-bg-light font-medium w-full rounded-full no-underline"
+              onClick={() => setIsMenuOpen(false)}
+            >
+            Profile
+            </Button>
+            </Link>
+            
+          </li>
+</>
+:
+<>
+ <li>
             <Link
               as={NavLink}
               to="/login"
@@ -149,6 +232,11 @@ export default function AppNavbar() {
             </Link>
             
           </li>
+</>
+}
+         
+
+
         </ul>
       )}
     </nav>
