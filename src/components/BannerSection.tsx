@@ -49,7 +49,7 @@ const ChevronDownIcon = () => (
 
 
 
-const Banner = ({ nextSectionId }: { nextSectionId?: string }) => {
+const BannerSection = ({ nextSectionId }: { nextSectionId?: string }) => {
   const { data, loading } = useServerFetch<Banner[]>("/api/banner");
   const bannerConfig = data?.[0];
   const slides: Slide[] = bannerConfig?.slides ?? [];
@@ -259,4 +259,4 @@ const Banner = ({ nextSectionId }: { nextSectionId?: string }) => {
   );
 };
 
-export default Banner;
+export default BannerSection;
