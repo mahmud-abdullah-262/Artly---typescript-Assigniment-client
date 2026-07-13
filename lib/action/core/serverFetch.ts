@@ -1,12 +1,14 @@
-import { useCurrentSession } from "../useCurrentSession";
+import { authClient } from "../../auth-client";
+
 
 
 
 const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:5000'
-const {session} = useCurrentSession()
+
 
 export const authHeader = async (): Promise<Record<string, string>> => {
-  const token = session?.token
+   const session = await authClient.getSession(); // hook না, direct call
+  const token = session?.data?.session?.token;
   return token ? { authorization: `Bearer ${token}` } : {};
 }
 

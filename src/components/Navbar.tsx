@@ -14,6 +14,7 @@ const navLinks: NavLinkItem[] = [
   { label: "Home", path: "/" },
   { label: "Explore", path: "/explore" },
   { label: "About", path: "/about" },
+  { label: "Cafe", path: "/cafe" },
  
 ];
 

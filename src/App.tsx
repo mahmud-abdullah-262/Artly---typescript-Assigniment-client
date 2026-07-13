@@ -14,6 +14,7 @@ import { useCurrentSession } from '../lib/action/useCurrentSession'
 import Cart from './pages/Cart'
 import NotFound from './pages/NotFound'
 import ErrorBoundary from './pages/ErrorBoundary'
+import Cafe from './pages/Cafe'
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Route index element={<Home />} />
       <Route path="about" element={<About />} />
       <Route path="explore" element={<Explore />} />
+      <Route path="cafe" element={<Cafe />} />
       {user ? <Route path="profile" element={<Profile />} />:""}
       {user ? <Route path="cart" element={<Cart />} />:""}
        <Route path="*" element={<NotFound />} />
