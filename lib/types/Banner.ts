@@ -1,5 +1,11 @@
 import { ObjectId } from "mongodb";
 
+export interface Cta {
+  label: string;
+  href: string;
+}
+
+
 export interface Slide {
   id?: string;
   badge?: string;
@@ -9,8 +15,8 @@ export interface Slide {
   dimensions?: string;
   price?: number;
   currency?: string;
-  ctaPrimary?: object;
-  ctaSecondary?: object;
+  ctaPrimary?: Cta;
+  ctaSecondary?: Cta;
   image?: string;
   alt?: string;
 }

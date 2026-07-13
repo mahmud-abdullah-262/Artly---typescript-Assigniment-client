@@ -1,38 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, Spinner } from "@heroui/react";
+import {  Link, Spinner } from "@heroui/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useServerFetch } from "../../lib/action/core/useServerFetch";
-import type { Banner } from "../../lib/types/Banner";
+import type { Banner, Slide } from "../../lib/types/Banner";
 
 // --- Types ---
 // এই টাইপগুলো তোমার lib/types/Banner.ts তে না থাকলে যোগ করে নিও।
 // ধরে নিচ্ছি Banner টাইপে ইতিমধ্যে slides: BannerSlide[] এবং
 // autoPlayIntervalMs: number ফিল্ড আছে।
 
-export interface BannerCta {
-  label: string;
-  href: string;
-}
 
-export interface BannerSlide {
-  id: string;
-  image: string;
-  alt: string;
-  badge?: string;
-  title: string;
-  artist: string;
-  medium: string;
-  dimensions: string;
-  price: number;
-  currency: string;
-  ctaPrimary: BannerCta;
-  ctaSecondary?: BannerCta;
-}
+
 
 const DEFAULT_AUTOPLAY_MS = 6000;
-const TRANSITION_S = 0.7; // seconds, crossfade duration
+const TRANSITION_S = 0.7;
 
-const formatPrice = (price: number, currency: string) => {
+const formatPrice = (price?: number, currency?: string) => {
+  if (price === undefined || !currency) return null;
   try {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -43,6 +27,7 @@ const formatPrice = (price: number, currency: string) => {
     return `${price} ${currency}`;
   }
 };
+
 
 const ChevronLeftIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden="true">
@@ -62,17 +47,13 @@ const ChevronDownIcon = () => (
   </svg>
 );
 
-interface BannerProps {
-  /** নেক্সট সেকশনের element id, "Explore" আইকনে ক্লিক করলে সেখানে স্মুথ স্ক্রল করবে */
-  nextSectionId?: string;
-}
 
-const Banner = ({ nextSectionId }: BannerProps) => {
+
+const Banner = ({ nextSectionId }: { nextSectionId?: string }) => {
   const { data, loading } = useServerFetch<Banner[]>("/api/banner");
   const bannerConfig = data?.[0];
-  const slides: BannerSlide[] = (bannerConfig as any)?.slides ?? [];
-  const autoPlayIntervalMs =
-    (bannerConfig as any)?.autoPlayIntervalMs ?? DEFAULT_AUTOPLAY_MS;
+  const slides: Slide[] = bannerConfig?.slides ?? [];
+  const autoPlayIntervalMs = bannerConfig?.autoPlayIntervalMs ?? DEFAULT_AUTOPLAY_MS;
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -90,7 +71,6 @@ const Banner = ({ nextSectionId }: BannerProps) => {
   const handlePrev = useCallback(() => goTo(activeIndex - 1), [activeIndex, goTo]);
   const handleNext = useCallback(() => goTo(activeIndex + 1), [activeIndex, goTo]);
 
-  // --- Autoplay ---
   useEffect(() => {
     if (!slides.length || isPaused) return;
     const timer = setInterval(() => {
@@ -99,7 +79,6 @@ const Banner = ({ nextSectionId }: BannerProps) => {
     return () => clearInterval(timer);
   }, [slides.length, autoPlayIntervalMs, isPaused, activeIndex]);
 
-  // --- Touch swipe (mobile, যেহেতু ছোট স্ক্রিনে arrow বাটন নেই) ---
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -107,7 +86,11 @@ const Banner = ({ nextSectionId }: BannerProps) => {
     if (touchStartX.current === null) return;
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
     if (Math.abs(deltaX) > 40) {
-      deltaX > 0 ? handlePrev() : handleNext();
+      if (deltaX > 0) {
+        handlePrev();
+      } else {
+        handleNext();
+      }
     }
     touchStartX.current = null;
   };
@@ -119,8 +102,8 @@ const Banner = ({ nextSectionId }: BannerProps) => {
 
   if (loading) {
     return (
-      <div className="flex h-[80vh] items-center justify-center bg-bg-light">
-        <Spinner color="primary" />
+      <div className="flex h-[60vh] items-center justify-center bg-bg-light">
+        <Spinner/>
       </div>
     );
   }
@@ -128,6 +111,7 @@ const Banner = ({ nextSectionId }: BannerProps) => {
   if (!slides.length) return null;
 
   const slide = slides[activeIndex];
+  const slideKey = slide.id ?? String(activeIndex); // id optional হওয়ায় fallback
 
   return (
     <section
@@ -138,12 +122,11 @@ const Banner = ({ nextSectionId }: BannerProps) => {
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative w-full h-[60vh] md:h-[65vh] lg:h-[70vh] min-h-[420px] max-h-[800px] overflow-hidden bg-secondary"
+      className="relative w-full h-[60vh] md:h-[65vh] lg:h-[70vh] min-h-105 max-h-200 overflow-hidden bg-secondary"
     >
-      {/* --- Image layer (crossfade + Ken Burns) --- */}
       <AnimatePresence mode="sync">
         <motion.div
-          key={slide.id}
+          key={slideKey}
           initial={{ opacity: 0, scale: 1 }}
           animate={{ opacity: 1, scale: 1.08 }}
           exit={{ opacity: 0 }}
@@ -153,28 +136,28 @@ const Banner = ({ nextSectionId }: BannerProps) => {
           }}
           className="absolute inset-0"
         >
-          <img
-            src={slide.image}
-            alt={slide.alt}
-            loading={activeIndex === 0 ? "eager" : "lazy"}
-            className="h-full w-full object-cover"
-          />
+          {slide.image && (
+            <img
+              src={slide.image}
+              alt={slide.alt ?? slide.title ?? ""}
+              loading={activeIndex === 0 ? "eager" : "lazy"}
+              className="h-full w-full object-cover"
+            />
+          )}
         </motion.div>
       </AnimatePresence>
 
-      {/* --- Scrim for text legibility --- */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-secondary/90 via-secondary/40 to-transparent" />
 
-      {/* --- Content --- */}
       <div className="relative z-10 flex h-full flex-col justify-end px-6 pb-16 sm:px-10 md:px-16 md:pb-20">
         <AnimatePresence mode="wait">
           <motion.div
-            key={slide.id}
+            key={slideKey}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="max-w-11/12"
+            className="max-w-full"
           >
             {slide.badge && (
               <span className="mb-4 inline-block rounded-md bg-accent px-3 py-1 text-xs font-semibold uppercase tracking-wide text-bg-light">
@@ -182,48 +165,58 @@ const Banner = ({ nextSectionId }: BannerProps) => {
               </span>
             )}
 
-            <h1 className="font-serif text-4xl font-bold leading-tight text-bg-light sm:text-5xl md:text-6xl ">
-              {slide.title}
-            </h1>
+            {slide.title && (
+              <h1
+                className="font-serif font-bold leading-tight text-bg-light whitespace-nowrap truncate"
+                style={{ fontSize: "clamp(1.75rem, 5vw, 3.75rem)" }}
+              >
+                {slide.title}
+              </h1>
+            )}
 
-            <p className="mt-3 text-lg text-bg-light/90">{slide.artist}</p>
-            <p className="mt-1 text-sm text-bg-light/60">
-              {slide.medium} &middot; {slide.dimensions}
-            </p>
+            {slide.artist && <p className="mt-3 text-lg text-bg-light/90">{slide.artist}</p>}
+            {(slide.medium || slide.dimensions) && (
+              <p className="mt-1 text-sm text-bg-light/60">
+                {[slide.medium, slide.dimensions].filter(Boolean).join(" · ")}
+              </p>
+            )}
 
             <div className="mt-6 flex flex-wrap items-center gap-4">
-              <Button
-                as="a"
-                href={slide.ctaPrimary.href}
-                className="bg-primary font-semibold text-bg-light"
-                endContent={<ChevronRightIcon />}
-              >
-                {slide.ctaPrimary.label}
-              </Button>
+              {slide.ctaPrimary && (
+                <Link
+                
+                  href={'/explore'}
+                  className="bg-primary font-semibold text-bg-light py-1 px-4 flex justify-center items-center"
+                 
+                >
+               {slide.ctaPrimary.label}
+                </Link>
+              )}
 
               {slide.ctaSecondary && (
-                <Button
-                  as="a"
+                <Link
+               
                   href={slide.ctaSecondary.href}
-                  variant="bordered"
+               
                   className="border-bg-light/70 font-semibold text-bg-light"
                 >
                   {slide.ctaSecondary.label}
-                </Button>
+                </Link>
               )}
 
-              <span className="text-xl font-bold text-bg-light">
-                {formatPrice(slide.price, slide.currency)}
-              </span>
+              {formatPrice(slide.price, slide.currency) && (
+                <span className="text-xl font-bold text-bg-light">
+                  {formatPrice(slide.price, slide.currency)}
+                </span>
+              )}
             </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* --- Dots (interactive slider control) --- */}
         <div className="mt-8 flex items-center gap-2">
           {slides.map((s, i) => (
             <button
-              key={s.id}
+              key={s.id ?? i}
               onClick={() => goTo(i)}
               aria-label={`Go to slide ${i + 1}`}
               aria-current={i === activeIndex}
@@ -235,7 +228,6 @@ const Banner = ({ nextSectionId }: BannerProps) => {
         </div>
       </div>
 
-      {/* --- Glassy nav arrows: md+ screens only --- */}
       <button
         onClick={handlePrev}
         aria-label="Previous slide"
@@ -251,8 +243,6 @@ const Banner = ({ nextSectionId }: BannerProps) => {
         <ChevronRightIcon />
       </button>
 
-      {/* --- Visual flow to next section --- */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-24 bg-gradient-to-b from-transparent to-bg-light/0" />
       {nextSectionId && (
         <button
           onClick={handleScrollNext}
