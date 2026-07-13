@@ -1,5 +1,5 @@
 import BannerSection from "../components/BannerSection";
-import Banner from "../components/BannerSection";
+
 import FeaturedCollections from "../components/FeaturedCollections";
 import NewArrivalSections from "../components/NewArrivalSections";
 import Newsletter from "../components/Newsletter";

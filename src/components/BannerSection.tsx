@@ -4,10 +4,19 @@ import { AnimatePresence, motion } from "motion/react";
 import { useServerFetch } from "../../lib/action/core/useServerFetch";
 import type { Banner, Slide } from "../../lib/types/Banner";
 
-// --- Types ---
-// এই টাইপগুলো তোমার lib/types/Banner.ts তে না থাকলে যোগ করে নিও।
-// ধরে নিচ্ছি Banner টাইপে ইতিমধ্যে slides: BannerSlide[] এবং
-// autoPlayIntervalMs: number ফিল্ড আছে।
+import { Truck, ShieldCheck, PackageCheck, Leaf } from "lucide-react";
+ 
+interface Feature {
+  icon: React.ElementType;
+  label: string;
+}
+ 
+const features: Feature[] = [
+  { icon: Truck, label: "Free shipping over 5000৳" },
+  { icon: ShieldCheck, label: "Authenticity guaranteed" },
+  { icon: PackageCheck, label: "Secure art packaging" },
+  { icon: Leaf, label: "Carbon-neutral delivery" },
+];
 
 
 
@@ -114,6 +123,7 @@ const BannerSection = ({ nextSectionId }: { nextSectionId?: string }) => {
   const slideKey = slide.id ?? String(activeIndex); // id optional হওয়ায় fallback
 
   return (
+    <>
     <section
       role="region"
       aria-roledescription="carousel"
@@ -255,7 +265,29 @@ const BannerSection = ({ nextSectionId }: { nextSectionId?: string }) => {
           </span>
         </button>
       )}
+       
     </section>
+    <section className="w-full bg-primary py-4 px-1">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  text-center items-center justify-center gap-x-10 gap-y-3 sm:justify-between ">
+        {features.map(({ icon: Icon, label }, idx) => (
+          <div
+            key={idx}
+            className="flex items-center gap-2.5 text-bg-light/90 justify-center"
+          >
+            <Icon
+              size={18}
+              strokeWidth={1.5}
+              className="text-accent shrink-0"
+            />
+            <span className="text-sm font-regular whitespace-nowrap">
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+    </>
+    
   );
 };
 
