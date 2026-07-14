@@ -9,6 +9,11 @@ import UpcomingEvent from "../components/ArtistOfTheDay";
 
 
 const Home = () => {
+  const getEmail = async (email: string): Promise<void> => {
+    console.log('User emailed:', email);
+  
+  };
+
   return (
     <div>
       <BannerSection/>
@@ -17,7 +22,10 @@ const Home = () => {
       <Promies />
       <ReviewSections />
       <UpcomingEvent />
-      <Newsletter />
+       <Newsletter 
+        subscriberCount={1250} 
+        onSubscribe={getEmail}
+      />
     </div>
   );
 };

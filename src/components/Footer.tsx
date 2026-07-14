@@ -89,7 +89,7 @@ const Footer = () => {
               {exploreLinks.map(({ label, href }) => (
                 <li key={label}>
                   <HeroLink
-                    as="a"
+                  
                     href={href}
                     onClick={(e) =>
                       handleSectionScroll(
@@ -115,8 +115,8 @@ const Footer = () => {
               {pageLinks.map(({ label, href }) => (
                 <li key={label}>
                   <HeroLink
-                    as={RouterLink}
-                    to={href}
+                  
+                    href={href}
                     className="text-sm text-text-muted transition-colors hover:text-accent"
                   >
                     {label}

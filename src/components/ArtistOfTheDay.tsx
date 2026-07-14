@@ -15,7 +15,7 @@ const ArtistOfTheDay = () => {
   const artist = getArtistOfTheDay();
 
   return (
-    <section className="bg-text-dark w-full">
+    <section className="bg-primary w-full">
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-5 py-10 sm:gap-10 sm:px-6 sm:py-14 md:grid-cols-2 md:gap-14 md:px-10 md:py-16">
         {/* Image side */}
         <div className="relative">
@@ -34,18 +34,18 @@ const ArtistOfTheDay = () => {
         {/* Content side */}
         <div className="flex flex-col justify-center">
           <span className="text-xs font-semibold tracking-[0.2em] text-light">
-            {artist.label}
+           Artist of the Day
           </span>
 
           <h2 className="mt-3 font-serif text-3xl font-bold text-bg-light sm:text-4xl md:text-5xl">
             {artist.name}
           </h2>
 
-          <p className="mt-2 text-sm font-medium text-accent sm:text-base">
+          <p className="mt-2 text-sm font-medium text-secondary sm:text-base">
             {artist.location} · {artist.medium}
           </p>
 
-          <div className="mt-4 space-y-3 text-sm text-text-muted sm:mt-6 sm:space-y-4 sm:text-base">
+          <div className="mt-4 space-y-3 text-sm text-secondary sm:mt-6 sm:space-y-4 sm:text-base">
             {artist.bio.map((paragraph, i) => (
               <p key={i} className="leading-relaxed">
                 {paragraph}
@@ -53,7 +53,7 @@ const ArtistOfTheDay = () => {
             ))}
           </div>
 
-          <blockquote className="mt-4 border-l-2 border-border pl-4 text-sm italic leading-relaxed text-text-muted sm:mt-6 sm:text-base">
+          <blockquote className="mt-4 border-l-2 border-border pl-4 text-sm italic leading-relaxed text-secondary sm:mt-6 sm:text-base">
             "{artist.quote}"
           </blockquote>
 
@@ -63,7 +63,7 @@ const ArtistOfTheDay = () => {
                 <p className="font-serif text-xl font-bold text-bg-light sm:text-2xl">
                   {stat.value}
                 </p>
-                <p className="text-xs text-text-muted sm:text-sm">
+                <p className="text-xs text-secondary sm:text-sm">
                   {stat.label}
                 </p>
               </div>
