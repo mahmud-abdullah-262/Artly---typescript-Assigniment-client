@@ -1,20 +1,10 @@
-import type { ArtistStat } from "./ArtistStat";
+import { ObjectId } from "mongodb";
 
-export type Artist = {
-  label: string; // e.g. "ARTIST SPOTLIGHT"
-  name: string;
-  location: string;
-  medium: string;
-  image: {
-    src: string;
-    alt: string;
-  };
-  bio: string[]; // one entry per paragraph
-  quote: string;
-  stats: ArtistStat[];
-  worksAvailable: number;
-  cta: {
-    label: string;
-    href: string;
-  };
-};
+export interface Artist {
+_id: ObjectId;
+artistID : number;
+name: string;
+imageUrl : string;
+location: string;
+bio: string
+}

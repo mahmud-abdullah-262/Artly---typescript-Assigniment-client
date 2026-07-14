@@ -1,9 +1,9 @@
 
-import type { Artist } from "../../lib/types/Artist";
+import type { TributeArtist } from "../../lib/types/TributeArtist";
 import { artistsOfTheDayData } from "../../lib/data/artistsOfTheDayDatd"
 
 
-function getArtistOfTheDay(): Artist {
+function getArtistOfTheDay(): TributeArtist {
   const keys = Object.keys(artistsOfTheDayData);
   const startOfYear = new Date(new Date().getFullYear(), 0, 0).getTime();
   const dayOfYear = Math.floor((Date.now() - startOfYear) / 86_400_000);

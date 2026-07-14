@@ -1,6 +1,6 @@
-import type { Artist } from "../types/Artist";
+import type { TributeArtist } from "../types/TributeArtist";
 
-export const artistsOfTheDayData: Record<string, Artist> = {
+export const artistsOfTheDayData: Record<string, TributeArtist> = {
   "mara-voss": {
     label: "ARTIST SPOTLIGHT",
     name: "Mara Voss",

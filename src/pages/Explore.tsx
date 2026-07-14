@@ -1,10 +1,10 @@
-import { Card, Spinner, Select, Label, ListBox, SearchField } from "@heroui/react";
+import { Card, Spinner, Select, ListBox, SearchField } from "@heroui/react";
 import { useServerFetch } from "../../lib/action/core/useServerFetch";
 import type { ArtworkProduct } from "../../lib/types/ArtWorksProduct";
 import { motion } from "framer-motion";
 
 import { Link } from "react-router-dom";
-import type { s } from "motion/react-client";
+
 
   const sort:string[] = ['Featured', 'Newest', 'Oldest']
 
