@@ -14,6 +14,7 @@ import { useCurrentSession } from '../lib/action/useCurrentSession'
 import Cart from './pages/Cart'
 import NotFound from './pages/NotFound'
 import ErrorBoundary from './pages/ErrorBoundary'
+import ExploreDetails from './pages/ExploreDetails'
 
 
 
@@ -28,7 +29,10 @@ function App() {
       <Route element={<MainLayout />}>
       <Route index element={<Home />} />
       <Route path="about" element={<About />} />
-      <Route path="explore" element={<Explore />} />
+   <Route path='explore'>
+      <Route index element={ <Explore /> }></Route>
+      <Route  path=':id' element={ <ExploreDetails />}></Route>
+   </Route>
    
       {user ? <Route path="profile" element={<Profile />} />:""}
       {user ? <Route path="cart" element={<Cart />} />:""}

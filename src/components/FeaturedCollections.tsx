@@ -1,5 +1,5 @@
 import { Spinner, Card } from "@heroui/react";
-import { motion, type Variant } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom"; // Vite-এ রাউটিংয়ের জন্য standard react-router-dom
 import { useServerFetch } from "../../lib/action/core/useServerFetch";
 import type { ArtworkProduct } from "../../lib/types/ArtWorksProduct";
@@ -42,9 +42,13 @@ const FeaturedCollections = () => {
     <section className="bg-bg-light py-12 px-4 md:px-8 max-w-7xl mx-auto">
       {/* হেডার সেকশন */}
       <div className="flex justify-between items-baseline mb-8 border-b border-border pb-4">
-        <h2 className="text-3xl md:text-4xl font-serif font-bold text-text-dark">
+        <div>
+            <p className="text-md text-accent tracking-widest font-light">EDITORS PIC</p>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-text-dark">
           Featured Artworks
         </h2>
+        </div>
+        
         <Link 
           to="/explore" 
           className="text-accent font-medium hover:underline flex items-center gap-1 transition-all"
