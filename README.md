@@ -1,4 +1,6 @@
-# 🎨 Artly — Art Marketplace & Gallery Platform
+<img width="1024" height="1024" alt="Gemini_Generated_Image_l5mir6l5mir6l5mi" src="https://github.com/user-attachments/assets/41aa51bd-ac7d-4c3f-b028-e81deac81d25" />
+
+#  Artly — Art Marketplace & Gallery Platform
 
 Artly is a full-stack art marketplace and gallery web application where art lovers can explore artworks and where registered artists can showcase and sell their own creations. Built with a modern TypeScript stack across both frontend and backend, Artly focuses on clean architecture, reusable components, secure APIs, and a polished, responsive UI/UX.
 
