@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react";
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 import { authClient } from "../../lib/auth-client";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 
 export default function Login() {
@@ -51,12 +51,25 @@ export default function Login() {
         }
   };
 
+ const handleGoogleLogin = async () => {
+  await authClient.signIn.social({
+    provider: "google",
+    callbackURL: "/", // login এর পর কোথায় redirect হবে
+  });
+};
+
   return (
     <div className="w-11/12 py-10 mx-auto">
+    
         <Form
      className="mx-auto flex w-full max-w-96 flex-col gap-4 rounded-xl border border-border bg-bg-card p-6 text-text-dark "
       onSubmit={onSubmit}
     >
+        <div>
+        <NavLink to="/" className="flex items-center gap-2">
+          <img className="w-20 h-10 object-cover object-center" src="/logo.png" alt="logo" />
+        </NavLink>
+      </div>
       <h1 className="text-xl font-semibold text-text-dark">Welcome Back!</h1>
 
    
@@ -74,6 +87,7 @@ export default function Login() {
       >
         <Label className="text-secondary">Email</Label>
         <Input
+         autoComplete="email"
           placeholder="john@example.com"
           className="border border-border bg-bg-light text-text-dark placeholder:text-text-muted focus:border-accent focus:ring-accent"
         />
@@ -103,6 +117,7 @@ export default function Login() {
       >
         <Label className="text-secondary">Password</Label>
         <Input
+         autoComplete="password"
           placeholder="Enter your password"
           className="border border-border bg-bg-light text-text-dark placeholder:text-text-muted focus:border-accent focus:ring-accent"
         />
@@ -125,7 +140,7 @@ export default function Login() {
         type="button"
         variant="secondary"
         className="flex items-center justify-center gap-2 border border-border bg-bg-light text-text-dark w-full hover:bg-border"
-        onPress={() => console.log("Google login clicked")}
+        onPress={() => handleGoogleLogin()}
       >
         <Icon icon="devicon:google" />
         Continue with Google

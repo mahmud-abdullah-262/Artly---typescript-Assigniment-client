@@ -16,7 +16,7 @@ const FeaturedCollections = () => {
   }
 
   // সর্বোচ্চ ৬টি ডেটা দেখানোর জন্য slice করা হয়েছে
-  const newArrivals = data?.slice(0, 6) || [];
+  const newArrivals = data?.slice(0, 8) || [];
 
   // মোশন অ্যানিমেশন কনফিগারেশন
   const containerVariants = {
@@ -59,7 +59,7 @@ const FeaturedCollections = () => {
 
       {/* কার্ড গ্রিড এবং মোশন কন্টেইনার */}
       <motion.div 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"

@@ -1,10 +1,12 @@
-import { Card, Spinner, Select, ListBox, SearchField, Button } from "@heroui/react";
+import { Card, Spinner, Select, ListBox, SearchField, Button, type Key } from "@heroui/react";
 import { useServerFetch } from "../../lib/action/core/useServerFetch";
 
 import { motion } from "framer-motion";
 
 import { Link, useSearchParams } from "react-router-dom";
 import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
+import type { ArtworkProduct } from "../../lib/types/ArtWorksProduct";
+import { useState } from "react";
 
 
 
@@ -85,7 +87,7 @@ import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
 
 const Explore = () => {
 const [searchParams, setSearchParams] = useSearchParams();
-
+const [searchInput, setSearchInput] = useState("")
 
 
 const currentPage = Number(searchParams.get("page")) || 1;
@@ -97,14 +99,14 @@ const currentPage = Number(searchParams.get("page")) || 1;
   const { data, loading } = useServerFetch<any>(`/api/artworks?${paramsString}`);
   
 
-  const { totalArtworks, size, page, result } = data || {};
-  const products = result || [];
+  const { totalArtworks, size, result } = data || {};
+  const products : ArtworkProduct[] = result || [];
 
 
   const totalItems = totalArtworks || 0;
   const itemsPerPage = size; 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const params = new URLSearchParams();
+
 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
@@ -116,23 +118,36 @@ const currentPage = Number(searchParams.get("page")) || 1;
    })
   };
 
-  const handleCategory = (key : string) => {
-   setSearchParams( prev => {
-    const newParams = new URLSearchParams(prev)
-    newParams.set("category", key.toString())
-    newParams.set('page', "1")
-    return newParams
-   })
-  }
+ const handleCategory = (key: Key | null) => {
+  setSearchParams(prev => {
+    const newParams = new URLSearchParams(prev);
+    newParams.set("category", key?.toString() ?? "");
+    newParams.set('page', "1");
+    return newParams;
+  });
+};
 
-  const handleSort = (key : string) => {
+  const handleSort = (key : Key | null) => {
     setSearchParams(prev => {
       const newParams = new URLSearchParams(prev)
-      newParams.set('sortby', key.toString())
+      newParams.set('sortby', key?.toString() ?? "")
       newParams.set('page', "1")
       return newParams
     })
   }
+
+const handleSearch = () => {
+  setSearchParams(prev => {
+    const newParams = new URLSearchParams(prev)
+    if (searchInput) {
+      newParams.set('search', searchInput)
+    } else {
+      newParams.delete('search')
+    }
+    newParams.set('page', "1")
+    return newParams
+  })
+}
 
 
   if (loading) {
@@ -179,7 +194,7 @@ const currentPage = Number(searchParams.get("page")) || 1;
   return (
     <div className="w-11/12 mx-auto">
       {/* হেডার সেকশন */}
-      <div className="flex justify-between items-baseline mb-8 border-b border-border pb-4">
+      <div className="flex justify-between items-baseline my-8 border-b border-border pb-4">
         <div>
           <p className="text-md text-accent tracking-widest font-light">OUR PALLATE</p>
         <h2 className="text-3xl md:text-4xl font-serif font-bold text-text-dark tracking-wider">
@@ -192,14 +207,27 @@ const currentPage = Number(searchParams.get("page")) || 1;
 {/* search and filter */}
 
 <section className="flex flex-col md:flex-row gap-2 w-full justify-center items-center my-2">
-    <SearchField name="search" className={'flex-1 border-transparent'}>
-    
-      <SearchField.Group className={'rounded-none border border-primary'}>
-        <SearchField.SearchIcon />
-        <SearchField.Input className="focus:outline-none focus:ring-0" placeholder="Search..." />
-        <SearchField.ClearButton />
-      </SearchField.Group>
-    </SearchField>
+  <div className="flex flex-1 gap-2">
+  <SearchField
+    name="search"
+    value={searchInput}
+    onChange={setSearchInput}
+    onKeyDown={(e) => {
+      if (e.key === "Enter") handleSearch()
+    }}
+    className={'flex-1 border-transparent'}
+  >
+    <SearchField.Group className={'rounded-none border border-primary'}>
+      <SearchField.SearchIcon />
+      <SearchField.Input className="focus:outline-none focus:ring-0" placeholder="Search..." />
+      <SearchField.ClearButton />
+    </SearchField.Group>
+  </SearchField>
+
+  <Button onPress={handleSearch} className="rounded-none bg-primary">
+    Search
+  </Button>
+</div>
 
     <Select className="w-[256px]" placeholder="Category" onChange={(key) => handleCategory(key)}>
      
@@ -253,7 +281,7 @@ const currentPage = Number(searchParams.get("page")) || 1;
 
 {/* content */}
       <motion.div 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -292,23 +320,23 @@ const currentPage = Number(searchParams.get("page")) || 1;
 
 
        {/* নেভিগেশন বাটনসমূহ (HeroUI এর স্ট্যান্ডার্ড বাটন) */}
-      <div className="flex justify-center items-center mx-auto  gap-2 ">
+      <div className="flex justify-center items-center mx-auto my-4 gap-2 ">
         <Button
           size="sm"
-          variant="flat"
+          className={'bg-primary'}
           isDisabled={currentPage === 1}
           onPress={() => handlePageChange(currentPage - 1)}
         >
           <CircleArrowLeft/>
         </Button>
         
-        <span className="text-sm min-w-[80px] text-center">
+        <span className="text-sm min-w-20 text-center">
           Page {currentPage} of {totalPages}
         </span>
 
         <Button
           size="sm"
-          variant="flat"
+          className={'bg-primary'}
           isDisabled={currentPage === totalPages}
           onPress={() => handlePageChange(currentPage + 1)} // ক্লিক করলে পেজ নাম্বার চেঞ্জ হচ্ছে
         >

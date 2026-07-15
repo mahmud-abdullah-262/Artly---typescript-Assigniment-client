@@ -3,22 +3,17 @@ import { Link as HeroLink, Separator  } from "@heroui/react";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { Icon } from "@iconify/react";
 
-// Explore -> হোম পেজের বিভিন্ন সেকশনে স্মুথ-স্ক্রল করবে (anchor link)
-const exploreLinks = [
-  { label: "Featured", href: "#featured" },
-  { label: "New Arrivals", href: "#new-arrivals" },
-  { label: "Our Promises", href: "#promises" },
-  { label: "Reviews", href: "#reviews" },
-  { label: "Upcoming Events", href: "#upcoming-events" },
-  { label: "Newsletter", href: "#newsletter" },
-];
+
 
 // Links -> আলাদা আলাদা পেজে নিয়ে যাবে (react-router)
 const pageLinks = [
-  { label: "All Products", href: "/products" },
+  {label: "Home", href: "/"},
+  { label: "All Products", href: "/explore" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "Cafe", href: "/cafe" },
+  { label: "Be A Seller", href: "/seller" },
+  { label: "Sell Your Artwork", href: "/sell" },
+  { label: "Terms & Conditions", href: "/terms" },
+  
 ];
 
 const socialLinks = [
@@ -27,20 +22,7 @@ const socialLinks = [
   { label: "X", href: "https://X.com", icon: <Icon icon="prime:twitter" /> },
 ];
 
-// একই origin (হোম পেজ) এ থাকলে স্মুথ স্ক্রল, না থাকলে আগে হোমে নিয়ে গিয়ে scroll
-const handleSectionScroll = (
-  e: React.MouseEvent<HTMLAnchorElement>,
-  hash: string
-) => {
-  if (window.location.pathname !== "/") return; // অন্য পেজে থাকলে স্বাভাবিক নেভিগেশন হবে
-  e.preventDefault();
-  const id = hash.replace("#", "");
-  const el = document.getElementById(id);
-  if (el) {
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-    window.history.pushState(null, "", hash);
-  }
-};
+
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -48,16 +30,14 @@ const Footer = () => {
   return (
     <footer className="bg-bg-light text-text-dark border-t border-border">
       <div className="mx-auto max-w-7xl px-6 py-12 sm:px-8 lg:px-10">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
             <RouterLink to="/" className="inline-flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-md bg-secondary text-bg-light font-serif text-lg font-semibold">
-                A
-              </span>
-              <span className="font-serif text-xl font-semibold text-text-dark">
-                Artly
-              </span>
+             
+            
+          <img className="w-20 h-10 object-cover object-center" src="/logo.png" alt="logo" />
+       
             </RouterLink>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-text-muted">
               A marketplace for original art and craft — connecting
@@ -80,31 +60,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Explore - homepage sections */}
-          <nav aria-label="Explore">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-secondary">
-              Explore
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {exploreLinks.map(({ label, href }) => (
-                <li key={label}>
-                  <HeroLink
-                  
-                    href={href}
-                    onClick={(e) =>
-                      handleSectionScroll(
-                        e as unknown as React.MouseEvent<HTMLAnchorElement>,
-                        href
-                      )
-                    }
-                    className="text-sm text-text-muted transition-colors hover:text-accent"
-                  >
-                    {label}
-                  </HeroLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
 
           {/* Links - other pages */}
           <nav aria-label="Links">

@@ -17,6 +17,7 @@ import ErrorBoundary from './pages/ErrorBoundary'
 import ExploreDetails from './pages/ExploreDetails'
 import BeaSeler from './pages/BeaSeler'
 import Sell from './pages/Sell'
+import Tarms from './pages/Tarms'
 
 
 
@@ -40,6 +41,7 @@ function App() {
       {user ? <Route path="cart" element={<Cart />} />:""}
       {user ? <Route path="seller" element={<BeaSeler />} />:""}
       {user ? <Route path="sell" element={<Sell />} />:""}
+      <Route path="terms" element={<Tarms />} />
        <Route path="*" element={<NotFound />} />
       </Route>
      

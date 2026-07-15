@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { motion, type TargetAndTransition, type Variants } from "framer-motion";
 import { useState } from "react";
-import { Spinner, Button } from "@heroui/react";
+import { Spinner, Button, Card } from "@heroui/react";
 import {
   ChevronLeft,
   Star,
@@ -19,6 +19,7 @@ import {
 import { useServerFetch } from "../../lib/action/core/useServerFetch";
 import type { ArtworkProduct } from "../../lib/types/ArtWorksProduct";
 import type { Artist } from "../../lib/types/Artist";
+
 
 const TABS = ["overview", "specs", "reviews"] as const;
 type TabKey = (typeof TABS)[number];
@@ -44,6 +45,25 @@ const fadeUp: Variants = {
   }),
 };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  } as const;
+
+    const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { type: "spring", stiffness: 100, damping: 15 } 
+    },
+  } as const ;
+
 const ExploreDetails = () => {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
@@ -52,6 +72,11 @@ const ExploreDetails = () => {
   const { data: artistProfile } = useServerFetch<Artist>(
     data?.artist?.artistID ? `/api/artist/${data.artist.artistID}` : null
   );
+
+  const {data:fromThisArtist} = useServerFetch<ArtworkProduct[]>(
+    artistProfile ?  `/api/artworkbyartist/${artistProfile?.artistId}` : null
+  )
+  console.log(fromThisArtist, 'from this artist')
 
   if (loading) {
     return (
@@ -106,7 +131,7 @@ const ExploreDetails = () => {
           initial="hidden"
           animate="show"
           custom={1}
-          className="rounded-2xl overflow-hidden bg-bg-card border border-border"
+          className="rounded-sm overflow-hidden bg-bg-card border border-border"
         >
           <img
             src={data.images.url}
@@ -223,7 +248,7 @@ const ExploreDetails = () => {
             className="mt-6 space-y-3"
           >
             <Button
-              className="w-full bg-primary text-white font-medium"
+              className="w-full bg-primary rounded-sm text-white font-medium"
               size="lg"
            
             >
@@ -233,14 +258,14 @@ const ExploreDetails = () => {
             <div className="grid grid-cols-2 gap-3">
               <Button
             
-                className=" bg-primary w-full text-text-light"
+                className="rounded-sm bg-primary w-full text-text-light"
               
               >
                <Heart size={18} /> Save
               </Button>
               <Button
           
-                className=" bg-primary w-full text-text-light"
+                className="rounded-sm bg-primary w-full text-text-light"
               
               >
               <Share2 size={18} />  Share
@@ -313,7 +338,7 @@ const ExploreDetails = () => {
               </p>
 
               {artistProfile && (
-                <div className="mt-8 rounded-xl border border-border bg-bg-card p-5">
+                <div className="mt-8 rounded-sm border border-border bg-bg-card p-5">
                   <p className="text-xs font-semibold tracking-widest uppercase text-text-muted">
                     About the artist
                   </p>
@@ -332,7 +357,7 @@ const ExploreDetails = () => {
                       <Button
                         size="sm"
                      
-                        className="mt-4 bg-primary text-text-light"
+                        className="mt-4 bg-primary rounded-sm text-text-light"
                       >
                         Go to Profile
                       </Button>
@@ -373,6 +398,64 @@ const ExploreDetails = () => {
           )}
         </div>
       </motion.div>
+
+<section  className="bg-bg-light py-12 px-4 md:px-8 max-w-7xl mx-auto">
+      {/* হেডার সেকশন */}
+      <>
+      
+        <div className="flex justify-between items-baseline mb-8 border-b border-border pb-4">
+        <div>
+            <p className="text-md text-accent tracking-widest font-light">FROM THIS ARTIST</p>
+          <h2 className="text-3xl md:text-4xl font-serif font-bold text-text-dark">
+          Related Artworks
+        </h2>
+        </div>
+        
+        
+      </div>
+
+      {/* কার্ড গ্রিড এবং মোশন কন্টেইনার */}
+      {fromThisArtist && <motion.div 
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.1 }}
+      >
+        {fromThisArtist.map((art) => (
+          <motion.div key={art?._id?.toString()} variants={cardVariants}>
+            <Link to={`/explore/${art?._id}`} className="block group">
+              <Card className="p-0  overflow-hidden rounded-none shadow-sm transition-all duration-300 group-hover:shadow-md">
+                
+              
+                <div className="relative aspect-3/4 w-full overflow-hidden">
+                  <img
+                    src={art?.images?.url || "/placeholder.jpg"}
+                    alt={art?.title || "Artwork Image"}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </div>
+
+                {/* কার্ডের কন্টেন্ট এরিয়া */}
+                <Card.Header className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 via-black/40 to-transparent p-6 text-white">
+                  <Card.Title className="text-xl font-serif font-semibold leading-tight mb-1 text-white">
+                    {art.title}
+                  </Card.Title>
+                  <Card.Description className="text-sm text-gray-200/95">
+                    {art.medium}
+                  </Card.Description>
+                </Card.Header>
+
+              </Card>
+            </Link>
+          </motion.div>
+        ))}
+      </motion.div>}
+      </>
+    
+    </section>
+
     </div>
   );
 };
@@ -386,7 +469,7 @@ const InfoBox = ({
   label: string;
   value: string;
 }) => (
-  <div className="flex items-start gap-2 rounded-lg bg-bg-card border border-border p-3">
+  <div className="flex items-start gap-2 rounded-sm bg-bg-card border border-border p-3">
     <Icon size={16} className="text-primary mt-0.5 shrink-0" />
     <div>
       <p className="text-[11px] uppercase tracking-wide text-text-muted">{label}</p>
@@ -396,10 +479,14 @@ const InfoBox = ({
 );
 
 const SpecRow = ({ label, value }: { label: string; value: string }) => (
-  <div className="rounded-lg bg-bg-card border border-border p-3">
+  <div className="rounded-sm bg-bg-card border border-border p-3">
     <p className="text-[11px] uppercase tracking-wide text-text-muted">{label}</p>
     <p className="text-sm text-text-dark mt-0.5">{value}</p>
   </div>
+  
 );
+
+
+
 
 export default ExploreDetails;

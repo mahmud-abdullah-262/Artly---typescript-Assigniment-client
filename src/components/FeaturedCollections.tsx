@@ -16,7 +16,7 @@ const FeaturedCollections = () => {
   }
 
   // সর্বোচ্চ ৬টি ডেটা দেখানোর জন্য slice করা হয়েছে
-  const featuredArtworks = data?.slice(0, 6) || [];
+  const featuredArtworks = data?.slice(0, 4) || [];
 
   // মোশন অ্যানিমেশন কনফিগারেশন
   const containerVariants = {
@@ -39,7 +39,7 @@ const FeaturedCollections = () => {
   } as const ;
 
   return (
-    <section className="bg-bg-light py-12 px-4 md:px-8 max-w-7xl mx-auto">
+    <section  className="bg-bg-light py-12 px-4 md:px-8 max-w-7xl mx-auto">
       {/* হেডার সেকশন */}
       <div className="flex justify-between items-baseline mb-8 border-b border-border pb-4">
         <div>
@@ -59,7 +59,7 @@ const FeaturedCollections = () => {
 
       {/* কার্ড গ্রিড এবং মোশন কন্টেইনার */}
       <motion.div 
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"

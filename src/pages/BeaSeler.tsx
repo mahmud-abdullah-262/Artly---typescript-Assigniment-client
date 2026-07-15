@@ -4,10 +4,11 @@ import { Check } from "lucide-react";
 import { serverMutate } from "../../lib/action/core/serverMutet";
 import { useServerFetch } from "../../lib/action/core/useServerFetch";
 import ArtistProfile from "../components/ArtistProfile";
+import { useNavigate } from "react-router-dom";
 
 
 const BeaSeler = () => {
-  
+    const navigate = useNavigate()
    const { user, isPending } = useCurrentSession();
    console.log(user, 'user')
     const {data:artistProfile} = useServerFetch(`/api/artist/${user?.id}`)
@@ -37,7 +38,8 @@ const BeaSeler = () => {
 
 
   if (!user) {
-    return <p className="text-center p-8 text-text-muted">You need to sign in to become a seller.</p>;
+     navigate("/login")
+     return
   }
 
   if(artistProfile){

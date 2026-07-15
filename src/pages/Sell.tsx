@@ -2,7 +2,7 @@ import {
   Button, Form, Input, Label, TextArea, TextField,
   Select, ListBox, Checkbox, toast
 } from "@heroui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useCurrentSession } from "../../lib/action/useCurrentSession";
 import { Check, UserPlus, ChevronDown } from "lucide-react";
@@ -16,6 +16,7 @@ const CURRENCIES = ["BDT", "USD"];
 const TRUST_BADGES = ["authentic_certified", "archival_packaging", "insured_delivery"];
 
 const Sell = () => {
+  const navigate = useNavigate()
   const { user, isPending } = useCurrentSession();
   const { data: artistProfile, loading: profilePending } = useServerFetch<Artist>(`/api/artist/${user?.id}`);
 
@@ -87,7 +88,8 @@ const Sell = () => {
   }
 
   if (!user) {
-    return <p className="text-center p-8 text-text-muted">You need to sign in to become a seller.</p>;
+    navigate('/login')
+    return ;
   }
 
   if (!artistProfile) {

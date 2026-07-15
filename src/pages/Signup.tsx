@@ -4,7 +4,7 @@ import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
 import {Icon} from "@iconify/react";
 import { authClient } from "../../lib/auth-client";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default  function Signup() {
   const navigate = useNavigate();
@@ -52,17 +52,30 @@ export default  function Signup() {
     }
   };
 
+   const handleGoogleLogin = async () => {
+  await authClient.signIn.social({
+    provider: "google",
+    callbackURL: "/", // login এর পর কোথায় redirect হবে
+  });
+};
+
   return (
     <div className="w-11/12 py-10 mx-auto">
         <Form
      className="mx-auto flex w-full max-w-96 flex-col gap-4 rounded-xl border border-border bg-bg-card p-6 text-text-dark "
       onSubmit={onSubmit}
     >
+       <div>
+        <NavLink to="/" className="flex items-center gap-2">
+          <img className="w-20 h-10 object-cover object-center" src="/logo.png" alt="logo" />
+        </NavLink>
+      </div>
       <h1 className="text-xl font-semibold text-text-dark">Create your account</h1>
-
+ 
       <TextField isRequired name="name">
         <Label className="text-secondary">Name</Label>
         <Input
+          autoComplete="name"
           placeholder="John Doe"
           className="border border-border bg-bg-light text-text-dark placeholder:text-text-muted focus:border-accent focus:ring-accent"
         />
@@ -71,6 +84,7 @@ export default  function Signup() {
 
       <TextField
         isRequired
+         
         name="email"
         type="email"
         validate={(value) => {
@@ -82,6 +96,7 @@ export default  function Signup() {
       >
         <Label className="text-secondary">Email</Label>
         <Input
+         autoComplete="email"
           placeholder="john@example.com"
           className="border border-border bg-bg-light text-text-dark placeholder:text-text-muted focus:border-accent focus:ring-accent"
         />
@@ -100,6 +115,7 @@ export default  function Signup() {
       >
         <Label className="text-secondary">Image link</Label>
         <Input
+         autoComplete="imageUrl"
           placeholder="https://example.com/avatar.jpg"
           className="border border-border bg-bg-light text-text-dark placeholder:text-text-muted focus:border-accent focus:ring-accent"
         />
@@ -128,6 +144,7 @@ export default  function Signup() {
       >
         <Label className="text-secondary">Password</Label>
         <Input
+         autoComplete="password"
           placeholder="Enter your password"
           className="border border-border bg-bg-light text-text-dark placeholder:text-text-muted focus:border-accent focus:ring-accent"
         />
@@ -150,7 +167,7 @@ export default  function Signup() {
         type="button"
         variant="secondary"
         className="flex items-center justify-center gap-2 border border-border bg-bg-light text-text-dark w-full hover:bg-border"
-        onPress={() => console.log("Google login clicked")}
+        onPress={() => handleGoogleLogin()}
       >
         
        <Icon icon="devicon:google" />

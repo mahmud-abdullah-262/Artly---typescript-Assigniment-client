@@ -24,18 +24,7 @@ const features: Feature[] = [
 const DEFAULT_AUTOPLAY_MS = 6000;
 const TRANSITION_S = 0.7;
 
-const formatPrice = (price?: number, currency?: string) => {
-  if (price === undefined || !currency) return null;
-  try {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency,
-      maximumFractionDigits: 0,
-    }).format(price);
-  } catch {
-    return `${price} ${currency}`;
-  }
-};
+
 
 
 const ChevronLeftIcon = () => (
@@ -203,7 +192,7 @@ const BannerSection = ({ nextSectionId }: { nextSectionId?: string }) => {
                 </Link>
               )}
 
-              {slide.ctaSecondary && (
+              {/* {slide.ctaSecondary && (
                 <Link
                
                   href={slide.ctaSecondary.href}
@@ -212,13 +201,13 @@ const BannerSection = ({ nextSectionId }: { nextSectionId?: string }) => {
                 >
                   {slide.ctaSecondary.label}
                 </Link>
-              )}
+              )} */}
 
-              {formatPrice(slide.price, slide.currency) && (
+              {/* {formatPrice(slide.price, slide.currency) && (
                 <span className="text-xl font-bold text-bg-light">
                   {formatPrice(slide.price, slide.currency)}
                 </span>
-              )}
+              )} */}
             </div>
           </motion.div>
         </AnimatePresence>

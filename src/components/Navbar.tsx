@@ -14,6 +14,7 @@ const navLinks: NavLinkItem[] = [
   { label: "Home", path: "/" },
   { label: "Explore", path: "/explore" },
   { label: "About", path: "/about" },
+  { label: "Terms", path: "/terms" },
   
  
 ];
@@ -41,12 +42,7 @@ const finalNavLinks = user
       <header className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <NavLink to="/" className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-md bg-text-dark text-bg-light font-bold text-lg font-serif">
-            A
-          </span>
-          <span className="font-serif text-xl font-semibold text-text-dark">
-            Artla
-          </span>
+          <img className="w-20 h-10 object-cover object-center" src="/logo.png" alt="logo" />
         </NavLink>
 
         {/* Desktop links */}
@@ -104,7 +100,7 @@ const finalNavLinks = user
             className={'no-underline '}
             href="/profile">
              <Button
-              className="bg-text-dark text-bg-light font-medium px-5 rounded-sm no-underline"
+              className="bg-primary text-bg-light font-medium px-5 rounded-sm no-underline"
             >
               Profile
             </Button>
@@ -129,7 +125,7 @@ const finalNavLinks = user
             className={'no-underline '}
             href="/signup">
              <Button
-              className="bg-text-dark text-bg-light font-medium px-5 rounded-sm no-underline"
+              className="bg-primary text-bg-light font-medium px-5 rounded-sm no-underline"
             >
               Signup
             </Button>
