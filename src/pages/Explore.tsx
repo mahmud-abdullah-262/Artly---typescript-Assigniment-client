@@ -3,8 +3,9 @@ import { useServerFetch } from "../../lib/action/core/useServerFetch";
 
 import { motion } from "framer-motion";
 
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
+
 
 
 
@@ -15,6 +16,11 @@ import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
     name: string;
     slug: string;
 }[] = [
+  {
+    id: "",
+    name: "all",
+    slug: "",
+  },
   {
     id: "painting",
     name: "Painting",
@@ -78,14 +84,17 @@ import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
 
 
 const Explore = () => {
-const [searchParams] = useSearchParams();
+const [searchParams, setSearchParams] = useSearchParams();
 
-  const navigate = useNavigate();
+
 
 const currentPage = Number(searchParams.get("page")) || 1;
-console.log(searchParams.get('page'), 'search params')
+// const currentCategory = searchParams.get('category') || ''
 
-  const { data, loading } = useServerFetch<any>(`/api/artworks?page=${currentPage}`);
+ const paramsString = searchParams.toString()
+
+
+  const { data, loading } = useServerFetch<any>(`/api/artworks?${paramsString}`);
   
 
   const { totalArtworks, size, page, result } = data || {};
@@ -95,20 +104,26 @@ console.log(searchParams.get('page'), 'search params')
   const totalItems = totalArtworks || 0;
   const itemsPerPage = size; 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-
+  const params = new URLSearchParams();
 
   const handlePageChange = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
 
-   
-    const params = new URLSearchParams();
-    
- 
-    params.set("page", newPage.toString());
-
- 
-    navigate(`?${params.toString()}`);
+   setSearchParams( prev => {
+    const newParams = new URLSearchParams(prev)
+    newParams.set("page", newPage.toString())
+    return newParams
+   })
   };
+
+  const handleCategory = (key : string) => {
+   setSearchParams( prev => {
+    const newParams = new URLSearchParams(prev)
+    newParams.set("category", key.toString())
+    newParams.set('page', "1")
+    return newParams
+   })
+  }
 
 
   if (loading) {
@@ -177,7 +192,7 @@ console.log(searchParams.get('page'), 'search params')
       </SearchField.Group>
     </SearchField>
 
-    <Select className="w-[256px]" placeholder="Category">
+    <Select className="w-[256px]" placeholder="Category" onChange={(key) => handleCategory(key)}>
      
       <Select.Trigger>
         <Select.Value />
@@ -268,7 +283,7 @@ console.log(searchParams.get('page'), 'search params')
 
 
        {/* নেভিগেশন বাটনসমূহ (HeroUI এর স্ট্যান্ডার্ড বাটন) */}
-      <div className="flex items-center gap-2">
+      <div className="flex justify-center items-center mx-auto  gap-2 ">
         <Button
           size="sm"
           variant="flat"
