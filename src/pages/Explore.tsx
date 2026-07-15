@@ -125,6 +125,15 @@ const currentPage = Number(searchParams.get("page")) || 1;
    })
   }
 
+  const handleSort = (key : string) => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev)
+      newParams.set('sortby', key.toString())
+      newParams.set('page', "1")
+      return newParams
+    })
+  }
+
 
   if (loading) {
     return (
@@ -215,7 +224,7 @@ const currentPage = Number(searchParams.get("page")) || 1;
       </Select.Popover>
     </Select>
 
- <Select className="w-[256px]" placeholder="Sort By">
+ <Select className="w-[256px]" placeholder="Sort By" onChange={(key) => handleSort(key)}>
   
       <Select.Trigger>
         <Select.Value />
