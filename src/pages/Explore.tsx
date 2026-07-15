@@ -1,9 +1,11 @@
-import { Card, Spinner, Select, ListBox, SearchField } from "@heroui/react";
+import { Card, Spinner, Select, ListBox, SearchField, Button } from "@heroui/react";
 import { useServerFetch } from "../../lib/action/core/useServerFetch";
-import type { ArtworkProduct } from "../../lib/types/ArtWorksProduct";
+
 import { motion } from "framer-motion";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
+
 
 
   const sort:string[] = ['Featured', 'Newest', 'Oldest']
@@ -76,10 +78,39 @@ import { Link } from "react-router-dom";
 
 
 const Explore = () => {
+const [searchParams] = useSearchParams();
 
- const { data, loading } = useServerFetch<ArtworkProduct[]>("/api/artworks");
-  const products = data?.slice(0, 10) || []
-  console.log(products, 'products')
+  const navigate = useNavigate();
+
+const currentPage = Number(searchParams.get("page")) || 1;
+console.log(searchParams.get('page'), 'search params')
+
+  const { data, loading } = useServerFetch<any>(`/api/artworks?page=${currentPage}`);
+  
+
+  const { totalArtworks, size, page, result } = data || {};
+  const products = result || [];
+
+
+  const totalItems = totalArtworks || 0;
+  const itemsPerPage = size; 
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+
+   
+    const params = new URLSearchParams();
+    
+ 
+    params.set("page", newPage.toString());
+
+ 
+    navigate(`?${params.toString()}`);
+  };
+
+
   if (loading) {
     return (
       <div className="w-full h-[60vh] flex justify-center items-center">
@@ -94,6 +125,9 @@ const Explore = () => {
     )
   }
 
+ 
+
+ 
 
 
   // মোশন অ্যানিমেশন কনফিগারেশন
@@ -231,7 +265,35 @@ const Explore = () => {
           </motion.div>
         ))}
       </motion.div>
+
+
+       {/* নেভিগেশন বাটনসমূহ (HeroUI এর স্ট্যান্ডার্ড বাটন) */}
+      <div className="flex items-center gap-2">
+        <Button
+          size="sm"
+          variant="flat"
+          isDisabled={currentPage === 1}
+          onPress={() => handlePageChange(currentPage - 1)}
+        >
+          <CircleArrowLeft/>
+        </Button>
+        
+        <span className="text-sm min-w-[80px] text-center">
+          Page {currentPage} of {totalPages}
+        </span>
+
+        <Button
+          size="sm"
+          variant="flat"
+          isDisabled={currentPage === totalPages}
+          onPress={() => handlePageChange(currentPage + 1)} // ক্লিক করলে পেজ নাম্বার চেঞ্জ হচ্ছে
+        >
+          <CircleArrowRight></CircleArrowRight>
+        </Button>
+      </div>
     </div>
+
+    
   );
 };
 

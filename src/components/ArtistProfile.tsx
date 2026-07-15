@@ -1,10 +1,11 @@
-import { Card, Table, Button, Skeleton } from "@heroui/react";
+import { Card, Table, Button, Skeleton, Link, toast } from "@heroui/react";
 import { Palette, ImageOff, Trash2, MapPin, Images } from "lucide-react";
 import { useServerFetch } from "../../lib/action/core/useServerFetch";
 import { useCurrentSession } from "../../lib/action/useCurrentSession";
 import { useProtectedFetch } from "../../lib/action/core/useProtectedFetch";
 import type { Artist } from "../../lib/types/Artist";
 import type { ArtworkProduct } from "../../lib/types/ArtWorksProduct";
+import { serverMutate } from "../../lib/action/core/serverMutet";
 
 
 const BIO_WORD_LIMIT = 100;
@@ -25,6 +26,15 @@ const ArtistProfile = () => {
  const { data: artistTable, loading: isTablePending } = useProtectedFetch<ArtworkProduct[]>(`/api/artworkbyartist/${artistProfile?.artistId}`);
   console.log(artistTable, 'artist table')
   const isLoadingProfile = isSessionPending || isProfilePending;
+
+  const handleDelete = async (link: string) => {
+    const result = await serverMutate(`/api/deleteArtwork?id=${link}`, undefined, "DELETE")
+    if(result){
+          toast.success('data successfully Deleted')
+        }else{
+          toast.danger(result.message)
+        }
+  }
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
@@ -129,8 +139,15 @@ const ArtistProfile = () => {
                         <Table.Cell className="text-text-muted">
                           {artWork?.artist?.artistID}
                         </Table.Cell>
-                        <Table.Cell>
-                          <Button variant="danger" size="sm" className="gap-1.5">
+                        <Table.Cell className={'flex justify-center items-center gap-2'}>
+                          <Link href={`/explore/${artWork?._id}`}>
+                          <Button variant="ghost" size="sm"  className={'rounded-xs bg-primary text-bg-light p-3'}>View</Button>
+                          </Link>
+                          <Button 
+                          variant="danger" 
+                          size="sm" 
+                          onClick={() => handleDelete(artWork._id)}
+                          className="p-3 rounded-xs">
                             <Trash2 size={14} />
                             Delete
                           </Button>

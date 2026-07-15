@@ -8,7 +8,7 @@ export const authHeader = async (): Promise<Record<string, string>> => {
   return token ? { authorization: `Bearer ${token}` } : {};
 }
 
-export const serverMutate = async (path:string, data:object, method = 'POST') => {
+export const serverMutate = async (path:string, data:object | undefined, method = 'POST') => {
   const isDeleteOrGet = ['GET'].includes(method.toUpperCase());
 const res = await fetch(`${baseUrl}${path}`, {
     method: method.toUpperCase(),
