@@ -2,9 +2,9 @@ import { ObjectId } from "mongodb";
 
 export interface Artist {
 _id: ObjectId;
-artistID : number;
+artistId : string;
 name: string;
-imageUrl : string;
+image : string;
 location: string;
 bio: string
 }

@@ -79,6 +79,7 @@ const Explore = () => {
 
  const { data, loading } = useServerFetch<ArtworkProduct[]>("/api/artworks");
   const products = data?.slice(0, 10) || []
+  console.log(products, 'products')
   if (loading) {
     return (
       <div className="w-full h-[60vh] flex justify-center items-center">

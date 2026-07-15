@@ -233,14 +233,14 @@ const ExploreDetails = () => {
             <div className="grid grid-cols-2 gap-3">
               <Button
             
-                className="border-border text-text-dark"
+                className=" bg-primary w-full text-text-light"
               
               >
                <Heart size={18} /> Save
               </Button>
               <Button
           
-                className="border-border text-text-dark"
+                className=" bg-primary w-full text-text-light"
               
               >
               <Share2 size={18} />  Share
@@ -319,7 +319,7 @@ const ExploreDetails = () => {
                   </p>
                   <div className="mt-3 flex items-start gap-4">
                     <img
-                      src={artistProfile.imageUrl}
+                      src={artistProfile.image}
                       alt={artistProfile.name}
                       className="w-12 h-12 rounded-full object-cover shrink-0"
                     />
@@ -332,7 +332,7 @@ const ExploreDetails = () => {
                       <Button
                         size="sm"
                      
-                        className="mt-4 border-border text-text-dark"
+                        className="mt-4 bg-primary text-text-light"
                       >
                         Go to Profile
                       </Button>

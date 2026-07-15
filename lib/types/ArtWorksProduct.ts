@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+
 
 interface Image {
   url: string;
@@ -48,12 +48,12 @@ interface Specs {
 }
 
 interface Artist {
-  artistID: number;
+  artistID: string;
 }
 
 // মূল ইন্টারফেস
 export interface ArtworkProduct {
-  _id: ObjectId;
+  _id: string;
   slug: string;
   title: string;
   category:  string;

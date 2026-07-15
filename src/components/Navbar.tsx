@@ -14,7 +14,7 @@ const navLinks: NavLinkItem[] = [
   { label: "Home", path: "/" },
   { label: "Explore", path: "/explore" },
   { label: "About", path: "/about" },
-  { label: "Cafe", path: "/cafe" },
+  
  
 ];
 
@@ -24,7 +24,7 @@ export default function AppNavbar() {
    const { user } = useCurrentSession();
 
 const finalNavLinks = user
-  ? [...navLinks, { label: 'Cart', path: '/cart' }]
+  ? [...navLinks, { label: 'Be A Seller', path: '/seller' }, { label: 'Sell Your Artworks', path: '/sell' }]
   : navLinks;
 
 
@@ -50,7 +50,7 @@ const finalNavLinks = user
         </NavLink>
 
         {/* Desktop links */}
-        <ul className="hidden sm:flex items-center gap-8">
+        <ul className="hidden lg:flex items-center gap-8">
           {finalNavLinks.map((link) => (
             <li key={link.path}>
               <NavLink to={link.path} className={navLinkClass}>
@@ -61,7 +61,7 @@ const finalNavLinks = user
         </ul>
 
         {/* Right side actions */}
-        <ul className="hidden sm:flex items-center gap-5">
+        <ul className="hidden lg:flex items-center gap-5">
           <li>
             <button
               aria-label="Search"
@@ -71,12 +71,15 @@ const finalNavLinks = user
             </button>
           </li>
           <li>
-            <button
+            <Link href="/cart">
+             <button
               aria-label="Cart"
               className="text-text-dark hover:text-primary transition-colors"
             >
               <ShoppingCart size={20} />
             </button>
+            </Link>
+           
           </li>
           {/*  */}
 
@@ -142,7 +145,7 @@ const finalNavLinks = user
         {/* Mobile menu toggle */}
         <button
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden text-text-dark"
+          className="lg:hidden text-text-dark"
           onClick={() => setIsMenuOpen((prev) => !prev)}
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -151,7 +154,7 @@ const finalNavLinks = user
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <ul className="sm:hidden flex flex-col gap-4 border-t border-border bg-bg-light px-6 py-5">
+        <ul className="lg:hidden flex flex-col gap-4 border-t border-border bg-bg-light px-6 py-5">
           {finalNavLinks.map((link) => (
             <li key={link.path}>
               <NavLink
